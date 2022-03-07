@@ -7,7 +7,7 @@
     "prepare": "husky install",
     "start": "node .",
     "start-dev": "nodemon . -q",
-    "test": "",
+    "test": "jest",
     "test-watch": "jest --watchAll",
     "coverage": "jest --watchAll --coverage"
   },
