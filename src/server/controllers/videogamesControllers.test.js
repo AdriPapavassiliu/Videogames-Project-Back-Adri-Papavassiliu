@@ -20,6 +20,7 @@ describe("Given a getAllVideogames controller", () => {
           genre: "Shooter",
           description:
             "A free-to-play strategic battle royale game featuring 60-player matches and team-based play",
+          year: 2019,
         },
         {
           name: "GTA V",
@@ -28,6 +29,7 @@ describe("Given a getAllVideogames controller", () => {
           genre: "Action",
           description:
             "An action-adventure game played from either a third-person or first-person perspective. Players complete missions—linear scenarios with set objectives—to progress through the story. Outside of the missions, players may freely roam the open world.",
+          year: 2013,
         },
       ];
       Videogame.find = jest.fn().mockResolvedValue(videogames);
