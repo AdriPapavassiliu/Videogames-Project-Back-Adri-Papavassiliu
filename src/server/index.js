@@ -2,7 +2,7 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const { default: helmet } = require("helmet");
-const { notFoundError, generalError } = require("../middlewares/errors");
+const { notFoundError, generalError } = require("./middlewares/errors");
 
 const app = express();
 
