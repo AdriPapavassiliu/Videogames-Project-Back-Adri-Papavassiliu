@@ -10,7 +10,7 @@ const VideogameSchema = new Schema({
     required: true,
   },
   platforms: {
-    type: String,
+    type: [String],
     required: true,
   },
   description: {
