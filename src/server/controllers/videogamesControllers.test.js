@@ -1,5 +1,8 @@
 const Videogame = require("../../database/models/Videogame");
-const { getAllVideogames } = require("./videogamesControllers");
+const {
+  getAllVideogames,
+  deleteVideogame,
+} = require("./videogamesControllers");
 
 jest.mock("../../database/models/Videogame");
 
@@ -38,6 +41,39 @@ describe("Given a getAllVideogames controller", () => {
 
       expect(Videogame.find).toHaveBeenCalled();
       expect(res.json).toHaveBeenCalledWith({ videogames });
+    });
+  });
+});
+
+describe("Given a deleteVideogame controller", () => {
+  beforeEach(() => {
+    jest.resetAllMocks();
+  });
+  describe("When it receives a request with the right id", () => {
+    test("Then it should call method json with the message 'Videogame deleted'", async () => {
+      const message = { message: "Videogame deleted" };
+      const req = { params: { videogameId: "1" } };
+      const res = {
+        json: jest.fn(),
+      };
+
+      Videogame.findByIdAndDelete = jest.fn().mockResolvedValue(res.json);
+      await deleteVideogame(req, res);
+
+      expect(res.json).toHaveBeenCalledWith(message);
+    });
+  });
+  describe("When it receives a request with a wrong id", () => {
+    test("Then it should throw an error 404 with message 'Videogame not found'", async () => {
+      const next = jest.fn();
+      const error = new Error("Videogame not found");
+      error.code = 404;
+      const req = { params: { vieogameId: "8888888888888" } };
+
+      Videogame.findByIdAndDelete = jest.fn().mockResolvedValue(null);
+      await deleteVideogame(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(error);
     });
   });
 });
