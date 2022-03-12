@@ -28,6 +28,7 @@ beforeEach(async () => {
     description:
       "A free-to-play strategic battle royale game featuring 60-player matches and team-based play",
     year: 2019,
+    id: "621546e7e9a6b0aac4560b1f",
   };
   await Videogame.create(newVideogame);
 });
@@ -45,6 +46,19 @@ describe("Given a /videogames endpoint", () => {
       const { body } = await request(app).get(url).expect(200);
 
       expect(body).toHaveProperty(expectedProperty);
+    });
+  });
+});
+
+describe("Given a /:videogameId endpoint", () => {
+  describe("When it receives a DELETE request", () => {
+    test("Then it should respond with status 200 and message 'Videogame deleted'", async () => {
+      const expectedReturn = { message: "Videogame deleted" };
+      const url = "/videogames/621546e7e9a6b0aac4560b1f";
+
+      const { body } = await request(app).delete(url).expect(200);
+
+      expect(body).toEqual(expectedReturn);
     });
   });
 });

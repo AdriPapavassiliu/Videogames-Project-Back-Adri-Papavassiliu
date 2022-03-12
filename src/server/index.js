@@ -12,7 +12,7 @@ app.use(morgan("dev"));
 app.use(helmet());
 app.use(express.json());
 
-app.use("/", videogamesRouters);
+app.use("/videogames", videogamesRouters);
 
 app.use(notFoundError);
 app.use(generalError);
