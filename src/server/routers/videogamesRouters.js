@@ -4,6 +4,6 @@ const { getAllVideogames } = require("../controllers/videogamesControllers");
 
 const router = express.Router();
 
-router.get("/videogames", getAllVideogames);
+router.get("/", getAllVideogames);
 
 module.exports = router;
