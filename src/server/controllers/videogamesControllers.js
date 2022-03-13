@@ -25,21 +25,16 @@ const createVideogame = async (req, res, next) => {
     next(error);
     return;
   }
-  try {
-    await Videogame.create({
-      name,
-      genre,
-      platforms,
-      description,
-      image,
-      year,
-    });
-    res.status(201).json({ message: "Videogame created" });
-  } catch (error) {
-    error.message = "Videogame couldn't be created";
-    error.code = 400;
-    next(error);
-  }
+
+  await Videogame.create({
+    name,
+    genre,
+    platforms,
+    description,
+    image,
+    year,
+  });
+  res.status(201).json({ message: "Videogame created" });
 };
 
 module.exports = { getAllVideogames, deleteVideogame, createVideogame };
