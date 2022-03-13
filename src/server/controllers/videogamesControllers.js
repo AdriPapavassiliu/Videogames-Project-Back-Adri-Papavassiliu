@@ -17,4 +17,24 @@ const deleteVideogame = async (req, res, next) => {
   }
 };
 
-module.exports = { getAllVideogames, deleteVideogame };
+const createVideogame = async (req, res, next) => {
+  const { name, genre, platforms, description, image, year } = req.body;
+  if (!name || !genre || !platforms || !description || !image) {
+    const error = new Error("Please fill the blank fields");
+    error.code = 400;
+    next(error);
+    return;
+  }
+
+  await Videogame.create({
+    name,
+    genre,
+    platforms,
+    description,
+    image,
+    year,
+  });
+  res.status(201).json({ message: "Videogame created" });
+};
+
+module.exports = { getAllVideogames, deleteVideogame, createVideogame };
