@@ -35,7 +35,11 @@ const createVideogame = async (req, res, next) => {
     const { body } = req;
 
     const oldFileName = path.join("uploads", req.file.filename);
-    const newFileName = path.join("uploads", req.body.name);
+    const extension = req.file.originalname.split(".").pop();
+    const newFileName = path.join(
+      "uploads",
+      `${req.body.name}-${Date.now()}.${extension}`
+    );
     fs.rename(oldFileName, newFileName, (error) => {
       if (error) {
         next(error);
