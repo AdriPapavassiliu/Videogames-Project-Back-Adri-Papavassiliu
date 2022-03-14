@@ -28,6 +28,7 @@
     "debug": "^4.3.3",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "express-validation": "^3.0.8",
     "firebase": "^9.6.8",
     "helmet": "^5.0.2",
     "husky": "^7.0.4",

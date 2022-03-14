@@ -9,4 +9,4 @@ const VideogameJoiSchema = Joi.object({
   year: Joi.number(),
 });
 
-export default VideogameJoiSchema;
+module.exports = VideogameJoiSchema;
