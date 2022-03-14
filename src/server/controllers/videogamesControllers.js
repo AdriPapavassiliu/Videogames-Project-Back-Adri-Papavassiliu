@@ -1,4 +1,17 @@
+const { initializeApp } = require("firebase/app");
+const {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+} = require("firebase/storage");
+const path = require("path");
+const fs = require("fs");
 const Videogame = require("../../database/models/Videogame");
+const firebaseConfig = require("../../utils/firebaseConfig");
+
+const fireBaseApp = initializeApp(firebaseConfig);
+const storage = getStorage(fireBaseApp);
 
 const getAllVideogames = async (req, res) => {
   const videogames = await Videogame.find();
@@ -18,23 +31,38 @@ const deleteVideogame = async (req, res, next) => {
 };
 
 const createVideogame = async (req, res, next) => {
-  const { name, genre, platforms, description, image, year } = req.body;
-  if (!name || !genre || !platforms || !description || !image) {
-    const error = new Error("Please fill the blank fields");
+  try {
+    const { body } = req;
+
+    const oldFileName = path.join("uploads", req.file.filename);
+    const newFileName = path.join("uploads", req.body.name);
+    fs.rename(oldFileName, newFileName, (error) => {
+      if (error) {
+        next(error);
+      }
+    });
+    fs.readFile(newFileName, async (error, file) => {
+      if (error) {
+        next(error);
+      } else {
+        const storageRef = ref(storage, body.name);
+        await uploadBytes(storageRef, file);
+        const firebaseFileURL = await getDownloadURL(storageRef);
+        body.image = firebaseFileURL;
+        await Videogame.create(body);
+
+        res.status(201).json({ message: "Videogame created" });
+      }
+    });
+  } catch (error) {
+    fs.unlink(path.join("uploads", req.file.filename), () => {
+      error.code = 400;
+      next(error);
+    });
+    error.message = "Videogame couldn't be created";
     error.code = 400;
     next(error);
-    return;
   }
-
-  await Videogame.create({
-    name,
-    genre,
-    platforms,
-    description,
-    image,
-    year,
-  });
-  res.status(201).json({ message: "Videogame created" });
 };
 
 module.exports = { getAllVideogames, deleteVideogame, createVideogame };

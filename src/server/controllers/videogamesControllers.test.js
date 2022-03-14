@@ -2,7 +2,6 @@ const Videogame = require("../../database/models/Videogame");
 const {
   getAllVideogames,
   deleteVideogame,
-  createVideogame,
 } = require("./videogamesControllers");
 
 jest.mock("../../database/models/Videogame");
@@ -75,37 +74,6 @@ describe("Given a deleteVideogame controller", () => {
       await deleteVideogame(req, null, next);
 
       expect(next).toHaveBeenCalledWith(error);
-    });
-  });
-});
-
-describe("Given a createVideogame controller", () => {
-  beforeEach(() => {
-    jest.resetAllMocks();
-  });
-  describe("When it receives a request with a videogame with a missing 'name' field as body", () => {
-    test("Then it should call method next with the message 'Please fill the blank fields'", async () => {
-      const next = jest.fn();
-      const videogame = {
-        genre: "Shooter",
-        platforms: ["PS4", "XBOX", "PS5", "PC"],
-        description:
-          "A free-to-play strategic battle royale game featuring 60-player matches and team-based play",
-        image: "https://www.xtrafondos.com/descargar.php?id=3030&vertical=1",
-        year: 2019,
-      };
-      const expectedError = expect.objectContaining({
-        code: 400,
-        message: "Please fill the blank fields",
-      });
-      const req = {
-        body: videogame,
-      };
-
-      Videogame.create = jest.fn().mockResolvedValue(videogame);
-      await createVideogame(req, null, next);
-
-      expect(next).toHaveBeenCalledWith(expectedError);
     });
   });
 });
