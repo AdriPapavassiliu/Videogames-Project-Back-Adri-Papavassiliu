@@ -30,43 +30,48 @@ const deleteVideogame = async (req, res, next) => {
   }
 };
 
-const createVideogame = async (req, res, next) => {
-  try {
-    const { body } = req;
+const createVideogame = async (req, res, next) =>
+  new Promise((resolve) => {
+    try {
+      const { body } = req;
 
-    const oldFileName = path.join("uploads", req.file.filename);
-    const extension = req.file.originalname.split(".").pop();
-    const newFileName = path.join(
-      "uploads",
-      `${req.body.name}-${Date.now()}.${extension}`
-    );
-    fs.rename(oldFileName, newFileName, (error) => {
-      if (error) {
-        next(error);
-      }
-    });
-    fs.readFile(newFileName, async (error, file) => {
-      if (error) {
-        next(error);
-      } else {
-        const storageRef = ref(storage, body.name);
-        await uploadBytes(storageRef, file);
-        const firebaseFileURL = await getDownloadURL(storageRef);
-        body.image = firebaseFileURL;
-        await Videogame.create(body);
+      const oldFileName = path.join("uploads", req.file.filename);
+      const extension = req.file.originalname.split(".").pop();
+      const newFileName = path.join(
+        "uploads",
+        `${req.body.name}-${Date.now()}.${extension}`
+      );
+      fs.rename(oldFileName, newFileName, (error) => {
+        if (error) {
+          next(error);
+          resolve();
+        }
+      });
+      fs.readFile(newFileName, async (error, file) => {
+        if (error) {
+          next(error);
+          resolve();
+        } else {
+          const storageRef = ref(storage, body.name);
+          await uploadBytes(storageRef, file);
+          const firebaseFileURL = await getDownloadURL(storageRef);
+          body.image = firebaseFileURL;
+          await Videogame.create(body);
 
-        res.status(201).json({ message: "Videogame created" });
-      }
-    });
-  } catch (error) {
-    fs.unlink(path.join("uploads", req.file.filename), () => {
+          res.status(201).json({ message: "Videogame created" });
+          resolve();
+        }
+      });
+    } catch (error) {
+      fs.unlink(path.join("uploads", req.file.filename), () => {
+        error.code = 400;
+        next(error);
+        resolve();
+      });
+      error.message = "Videogame couldn't be created";
       error.code = 400;
       next(error);
-    });
-    error.message = "Videogame couldn't be created";
-    error.code = 400;
-    next(error);
-  }
-};
-
+      resolve();
+    }
+  });
 module.exports = { getAllVideogames, deleteVideogame, createVideogame };
