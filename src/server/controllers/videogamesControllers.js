@@ -56,9 +56,14 @@ const createVideogame = async (req, res, next) =>
           await uploadBytes(storageRef, file);
           const firebaseFileURL = await getDownloadURL(storageRef);
           body.image = firebaseFileURL;
-          await Videogame.create(body);
+          const videogameCreated = await Videogame.create(body);
 
-          res.status(201).json({ message: "Videogame created" });
+          res
+            .status(201)
+            .json({
+              message: "Videogame created",
+              videogame: videogameCreated,
+            });
           resolve();
         }
       });
