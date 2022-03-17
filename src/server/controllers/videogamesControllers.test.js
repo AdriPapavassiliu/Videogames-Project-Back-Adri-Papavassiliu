@@ -92,7 +92,7 @@ describe("Given a createVideogame controller", () => {
     test("Then it should call json with the new videogame and the firebase url as image property", async () => {
       const newVideogame = {
         name: "Hola",
-        platforms: ["PS4, XBOX, PS5, PC"],
+        platforms: "PS4, XBOX, PS5, PC",
         genre: "Shooter",
         description: "Hola",
         year: 2019,
