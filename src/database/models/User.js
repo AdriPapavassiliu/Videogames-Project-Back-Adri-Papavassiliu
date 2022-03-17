@@ -13,6 +13,11 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+  videogames: {
+    type: [Schema.Types.ObjectId],
+    ref: "Videogame",
+    default: [],
+  },
 });
 
 const User = model("User", UserSchema, "users");

@@ -4,7 +4,7 @@ const videogamaeJoi = {
   body: Joi.object({
     name: Joi.string().min(3).max(30).required(),
     genre: Joi.string().required(),
-    platforms: Joi.string().min(2).required(),
+    platforms: Joi.string().required(),
     description: Joi.string().min(3).max(300).required(),
     image: Joi.string(),
     year: Joi.number(),
