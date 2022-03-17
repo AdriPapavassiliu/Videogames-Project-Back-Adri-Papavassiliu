@@ -48,8 +48,7 @@
       "!src/**/*.test.js",
       "!src/index.js",
       "!src/server/initializeServer.js",
-      "!src/database/index.js",
-      "!src/database/models/User.js"
+      "!src/database/index.js"
     ]
   }
 }
