@@ -34,7 +34,7 @@ const createVideogame = async (req, res, next) =>
   new Promise((resolve) => {
     try {
       const { body } = req;
-
+      body.platforms = body.platforms.split(",");
       const oldFileName = path.join("uploads", req.file.filename);
       const extension = req.file.originalname.split(".").pop();
       const newFileName = path.join(
@@ -58,12 +58,10 @@ const createVideogame = async (req, res, next) =>
           body.image = firebaseFileURL;
           const videogameCreated = await Videogame.create(body);
 
-          res
-            .status(201)
-            .json({
-              message: "Videogame created",
-              videogame: videogameCreated,
-            });
+          res.status(201).json({
+            message: "Videogame created",
+            videogame: videogameCreated,
+          });
           resolve();
         }
       });
