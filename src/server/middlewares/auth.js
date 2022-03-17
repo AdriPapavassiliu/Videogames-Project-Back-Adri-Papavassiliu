@@ -1,20 +1,26 @@
 const jwt = require("jsonwebtoken");
 
 const auth = (req, res, next) => {
-  const headerAuthorization = req.header("authorization");
-  if (!headerAuthorization) {
+  const headerAuth = req.header("Authorization");
+  if (!headerAuth) {
     const error = new Error("Token missing");
     error.code = 401;
-    return next(error);
+    next(error);
+    return;
   }
-  const token = headerAuthorization.replace("Bearer ", "");
+  const token = headerAuth.replace("Bearer ", "");
   try {
-    jwt.verify(token, process.env.JWT_SECRET);
-    return next();
+    const { username, id } = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = {
+      username,
+      id,
+    };
+    next();
   } catch (error) {
-    error.code = 401;
-    return next(error);
+    const eror = new Error("Wrong token");
+    eror.code = 401;
+    next(eror);
   }
 };
 
-module.exports = auth;
+module.exports = { auth };
