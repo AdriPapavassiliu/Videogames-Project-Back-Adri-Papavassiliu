@@ -49,13 +49,4 @@ const loginUser = async (req, res, next) => {
   return res.json({ token });
 };
 
-const loadUser = async (req, res) => {
-  const headerAuthorization = req.header("authorization");
-  const token = headerAuthorization.replace("Bearer ", "");
-  const { username } = jwt.decode(token);
-  const user = await User.findOne({ username });
-
-  res.json(user);
-};
-
-module.exports = { createUser, loginUser, loadUser };
+module.exports = { createUser, loginUser };
