@@ -7,15 +7,17 @@ const {
   deleteVideogame,
   createVideogame,
 } = require("../controllers/videogamesControllers");
+const { auth } = require("../middlewares/auth");
 const videogamaeJoi = require("../schemas/videogameJoi");
 
 const router = express.Router();
 const upload = multer({ dest: "uploads/" });
 
 router.get("/", getAllVideogames);
-router.delete("/:videogameId", deleteVideogame);
+router.delete("/:videogameId", auth, deleteVideogame);
 router.post(
   "/create",
+  auth,
   upload.single("image"),
   validate(videogamaeJoi),
   createVideogame

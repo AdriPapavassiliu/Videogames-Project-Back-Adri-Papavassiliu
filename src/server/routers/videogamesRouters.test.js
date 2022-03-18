@@ -2,11 +2,14 @@ require("dotenv").config();
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const { default: mongoose } = require("mongoose");
 const request = require("supertest");
+const jwt = require("jsonwebtoken");
 const app = require("..");
 const connectDB = require("../../database");
+const User = require("../../database/models/User");
 const Videogame = require("../../database/models/Videogame");
 
 let mongoServer;
+let token;
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
   const connectionString = mongoServer.getUri();
@@ -31,6 +34,26 @@ beforeEach(async () => {
     id: "621546e7e9a6b0aac4560b1f",
   };
   await Videogame.create(newVideogame);
+
+  await User.create({
+    name: "name",
+    username: "user1",
+    password: "$2b$10$vQcjA2ldvcvUuGTil.Jp6uLgNoAZvVtmFFR1hHH4iKHz4zqfvl7oe",
+    movies: {},
+  });
+
+  const userDataToken = {
+    username: "user1",
+  };
+
+  token = jwt.sign(userDataToken, process.env.JWT_SECRET);
+
+  await User.create({
+    name: "user2",
+    username: "user2",
+    password: "user2",
+    movies: {},
+  });
 });
 
 afterEach(async () => {
@@ -56,7 +79,10 @@ describe("Given a /:videogameId endpoint", () => {
       const expectedReturn = { message: "Videogame deleted" };
       const url = "/videogames/621546e7e9a6b0aac4560b1f";
 
-      const { body } = await request(app).delete(url).expect(200);
+      const { body } = await request(app)
+        .delete(url)
+        .set("authorization", `Bearer ${token}`)
+        .expect(200);
 
       expect(body).toEqual(expectedReturn);
     });
