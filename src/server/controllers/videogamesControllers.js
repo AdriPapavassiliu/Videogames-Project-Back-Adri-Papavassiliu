@@ -77,4 +77,83 @@ const createVideogame = async (req, res, next) =>
       resolve();
     }
   });
-module.exports = { getAllVideogames, deleteVideogame, createVideogame };
+
+const updateVideogame = async (req, res, next) =>
+  new Promise((resolve) => {
+    try {
+      if (req.file) {
+        const { body } = req;
+        const { videogameId } = req.params;
+        body.platforms = body.platforms.split(",");
+
+        const oldFileName = path.join("uploads", req.file.filename);
+        const extension = req.file.originalname.split(".").pop();
+        const newFileName = path.join(
+          "uploads",
+          `${req.body.name}-${Date.now()}.${extension}`
+        );
+        fs.rename(oldFileName, newFileName, (error) => {
+          if (error) {
+            next(error);
+            resolve();
+          }
+        });
+
+        fs.readFile(newFileName, async (error, file) => {
+          if (error) {
+            next(error);
+            resolve();
+          } else {
+            const storageRef = ref(storage, body.name);
+            await uploadBytes(storageRef, file);
+
+            const firebaseFileURL = await getDownloadURL(storageRef);
+            body.image = firebaseFileURL;
+            const updatedVideogame = await Videogame.findByIdAndUpdate(
+              videogameId,
+              body,
+              {
+                new: true,
+              }
+            );
+
+            res.status(200).json(updatedVideogame);
+            resolve();
+          }
+        });
+      } else {
+        (async () => {
+          const { body } = req;
+          const { videogameId } = req.params;
+
+          const updatedVideogame = await Videogame.findByIdAndUpdate(
+            videogameId,
+            body,
+            {
+              new: true,
+            }
+          );
+
+          res.status(200).json(updatedVideogame);
+          resolve();
+        })();
+      }
+    } catch (error) {
+      fs.unlink(path.join("uploads", req.file.filename), () => {
+        error.code = 400;
+        next(error);
+        resolve();
+      });
+      error.message = "Videogame couldn't be created";
+      error.code = 400;
+      next(error);
+      resolve();
+    }
+  });
+
+module.exports = {
+  getAllVideogames,
+  deleteVideogame,
+  createVideogame,
+  updateVideogame,
+};
