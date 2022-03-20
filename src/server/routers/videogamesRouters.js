@@ -7,6 +7,7 @@ const {
   deleteVideogame,
   createVideogame,
   updateVideogame,
+  getVideogame,
 } = require("../controllers/videogamesControllers");
 const { auth } = require("../middlewares/auth");
 const videogamaeJoi = require("../schemas/videogameJoi");
@@ -29,5 +30,6 @@ router.put(
   upload.single("image"),
   updateVideogame
 );
+router.get("/:videogameId", getVideogame);
 
 module.exports = router;
