@@ -4,6 +4,7 @@ const {
   getAllVideogames,
   deleteVideogame,
   createVideogame,
+  getVideogame,
 } = require("./videogamesControllers");
 
 jest.mock("../../database/models/Videogame");
@@ -237,6 +238,35 @@ describe("Given a createVideogame controller", () => {
       await createVideogame(req, null, next);
 
       expect(next).toHaveBeenCalled();
+    });
+  });
+});
+
+describe("Given a getVideogame controller", () => {
+  beforeEach(() => {
+    jest.resetAllMocks();
+  });
+  describe("When it receives a request with the id", () => {
+    test("Then it should call method json with the videogame", async () => {
+      const req = { params: { videogameId: "1" } };
+      const res = {
+        json: jest.fn(),
+      };
+      const videogame = {
+        name: "Apex Legends",
+        image: "https://www.xtrafondos.com/descargar.php?id=3030&vertical=1",
+        platforms: ["PS4", "XBOX", "PS5", "PC"],
+        genre: "Shooter",
+        description:
+          "A free-to-play strategic battle royale game featuring 60-player matches and team-based play",
+        year: 2019,
+        id: "1",
+      };
+
+      Videogame.findById = jest.fn().mockResolvedValue(videogame);
+      await getVideogame(req, res);
+
+      expect(res.json).toHaveBeenCalledWith({ videogame });
     });
   });
 });

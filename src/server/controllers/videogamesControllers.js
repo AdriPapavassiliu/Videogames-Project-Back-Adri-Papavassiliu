@@ -134,7 +134,10 @@ const updateVideogame = async (req, res, next) =>
             }
           );
 
-          res.status(200).json(updatedVideogame);
+          res.status(200).json({
+            message: "Videogame updated",
+            videogame: updatedVideogame,
+          });
           resolve();
         })();
       }
@@ -144,16 +147,23 @@ const updateVideogame = async (req, res, next) =>
         next(error);
         resolve();
       });
-      error.message = "Videogame couldn't be created";
+      error.message = "Videogame couldn't be updated";
       error.code = 400;
       next(error);
       resolve();
     }
   });
 
+const getVideogame = async (req, res) => {
+  const { videogameId } = req.params;
+  const videogame = await Videogame.findById(videogameId);
+  res.json({ videogame });
+};
+
 module.exports = {
   getAllVideogames,
   deleteVideogame,
   createVideogame,
   updateVideogame,
+  getVideogame,
 };
