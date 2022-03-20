@@ -87,4 +87,15 @@ describe("Given a /:videogameId endpoint", () => {
       expect(body).toEqual(expectedReturn);
     });
   });
+
+  describe("When it receives a GET request", () => {
+    test("Then it should respond with status 200 and have property videogame", async () => {
+      const expectedProperty = "videogame";
+      const url = "/videogames/621546e7e9a6b0aac4560b1f";
+
+      const { body } = await request(app).get(url).expect(200);
+
+      expect(body).toHaveProperty(expectedProperty);
+    });
+  });
 });
