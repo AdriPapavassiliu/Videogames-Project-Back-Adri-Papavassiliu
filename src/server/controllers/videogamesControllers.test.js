@@ -17,6 +17,25 @@ jest.mock("firebase/storage", () => ({
   uploadBytes: async () => {},
 }));
 
+const newVideogame = {
+  name: "Hola",
+  platforms: "PS4, XBOX, PS5, PC",
+  genre: "Shooter",
+  description: "Hola",
+  year: 2019,
+  id: "1",
+};
+const newFile = {
+  fieldname: "image",
+  originalname: "hola.jpeg",
+  encoding: "7bit",
+  mimetype: "image/jpeg",
+  destination: "uploads/",
+  filename: "93ec034d18753a982e662bc2fdf9a584",
+  path: "uploads/93ec034d18753a982e662bc2fdf9a584",
+  size: 8750,
+};
+
 describe("Given a getAllVideogames controller", () => {
   beforeEach(() => {
     jest.resetAllMocks();
@@ -92,23 +111,6 @@ describe("Given a deleteVideogame controller", () => {
 describe("Given a createVideogame controller", () => {
   describe("When it's instantiated with a new videogame in the body and an image as file", () => {
     test("Then it should call json with the new videogame and the firebase url as image property", async () => {
-      const newVideogame = {
-        name: "Hola",
-        platforms: "PS4, XBOX, PS5, PC",
-        genre: "Shooter",
-        description: "Hola",
-        year: 2019,
-      };
-      const newFile = {
-        fieldname: "image",
-        originalname: "hola.jpeg",
-        encoding: "7bit",
-        mimetype: "image/jpeg",
-        destination: "uploads/",
-        filename: "93ec034d18753a982e662bc2fdf9a584",
-        path: "uploads/93ec034d18753a982e662bc2fdf9a584",
-        size: 8750,
-      };
       const res = {
         status: jest.fn().mockReturnThis(),
         json: jest.fn(),
@@ -139,24 +141,6 @@ describe("Given a createVideogame controller", () => {
 
   describe("When it's instantiated with a new videogame in the body and an image in the file, and has an error on fs.rename", () => {
     test("Then it should should call next with an error", async () => {
-      const newVideogame = {
-        name: "Hola",
-        platforms: ["PS4, XBOX, PS5, PC"],
-        genre: "Shooter",
-        description: "Hola",
-        year: 2019,
-      };
-      const newFile = {
-        fieldname: "image",
-        originalname: "hola.jpeg",
-        encoding: "7bit",
-        mimetype: "image/jpeg",
-        destination: "uploads/",
-        filename: "93ec034d18753a982e662bc2fdf9a584",
-        path: "uploads/93ec034d18753a982e662bc2fdf9a584",
-        size: 8750,
-      };
-
       const req = {
         body: newVideogame,
         file: newFile,
@@ -175,17 +159,6 @@ describe("Given a createVideogame controller", () => {
 
   describe("When it receives a request with file and no videogame on body", () => {
     test("Then it should call next with an error", async () => {
-      const newFile = {
-        fieldname: "image",
-        originalname: "hola.jpeg",
-        encoding: "7bit",
-        mimetype: "image/jpeg",
-        destination: "uploads/",
-        filename: "93ec034d18753a982e662bc2fdf9a584",
-        path: "uploads/93ec034d18753a982e662bc2fdf9a584",
-        size: 8750,
-      };
-
       const req = {
         file: newFile,
       };
@@ -206,24 +179,6 @@ describe("Given a createVideogame controller", () => {
 
   describe("When it has an error when renaming the file", () => {
     test("Then it should call the next method with an error", async () => {
-      const newVideogame = {
-        name: "Hola",
-        platforms: ["PS4, XBOX, PS5, PC"],
-        genre: "Shooter",
-        description: "Hola",
-        year: 2019,
-      };
-      const newFile = {
-        fieldname: "image",
-        originalname: "hola.jpeg",
-        encoding: "7bit",
-        mimetype: "image/jpeg",
-        destination: "uploads/",
-        filename: "93ec034d18753a982e662bc2fdf9a584",
-        path: "uploads/93ec034d18753a982e662bc2fdf9a584",
-        size: 8750,
-      };
-
       const req = {
         body: newVideogame,
         file: newFile,
@@ -275,7 +230,7 @@ describe("Given a getVideogame controller", () => {
 describe("Given an updateVideogame controller", () => {
   describe("When it's instantiated with a new videogame in the body and an image as file", () => {
     test("Then it should call json with the new videogame and the firebase url as image property", async () => {
-      const newVideogame = {
+      const newViideogame = {
         name: "Hola",
         platforms: "PS4, XBOX, PS5, PC",
         genre: "Shooter",
@@ -283,7 +238,7 @@ describe("Given an updateVideogame controller", () => {
         year: 2019,
         id: "1",
       };
-      const newFile = {
+      const newFille = {
         fieldname: "image",
         originalname: "hola.jpeg",
         encoding: "7bit",
@@ -305,8 +260,8 @@ describe("Given an updateVideogame controller", () => {
         });
 
       const req = {
-        body: newVideogame,
-        file: newFile,
+        body: newViideogame,
+        file: newFille,
         params: "1",
       };
       const next = jest.fn();
@@ -324,25 +279,6 @@ describe("Given an updateVideogame controller", () => {
 
   describe("When it's instantiated with a new videogame in the body and an image in the file, and has an error on fs.rename", () => {
     test("Then it should should call next with an error", async () => {
-      const newVideogame = {
-        name: "Hola",
-        platforms: ["PS4, XBOX, PS5, PC"],
-        genre: "Shooter",
-        description: "Hola",
-        year: 2019,
-        id: "1",
-      };
-      const newFile = {
-        fieldname: "image",
-        originalname: "hola.jpeg",
-        encoding: "7bit",
-        mimetype: "image/jpeg",
-        destination: "uploads/",
-        filename: "93ec034d18753a982e662bc2fdf9a584",
-        path: "uploads/93ec034d18753a982e662bc2fdf9a584",
-        size: 8750,
-      };
-
       const req = {
         body: newVideogame,
         file: newFile,
@@ -362,17 +298,6 @@ describe("Given an updateVideogame controller", () => {
 
   describe("When it receives a request with file and no videogame on body", () => {
     test("Then it should call next with an error", async () => {
-      const newFile = {
-        fieldname: "image",
-        originalname: "hola.jpeg",
-        encoding: "7bit",
-        mimetype: "image/jpeg",
-        destination: "uploads/",
-        filename: "93ec034d18753a982e662bc2fdf9a584",
-        path: "uploads/93ec034d18753a982e662bc2fdf9a584",
-        size: 8750,
-      };
-
       const req = {
         file: newFile,
       };
@@ -393,14 +318,6 @@ describe("Given an updateVideogame controller", () => {
 
   describe("When it's instantiated with a new videogame in the body and not a file", () => {
     test("Then it should call json with the new videogame", async () => {
-      const newVideogame = {
-        name: "Hola",
-        platforms: "PS4, XBOX, PS5, PC",
-        genre: "Shooter",
-        description: "Hola",
-        year: 2019,
-        id: "1",
-      };
       const res = {
         status: jest.fn().mockReturnThis(),
         json: jest.fn(),
