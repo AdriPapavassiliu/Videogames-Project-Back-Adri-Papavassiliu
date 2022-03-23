@@ -345,47 +345,4 @@ describe("Given an updateVideogame controller", () => {
       expect(res.json).toHaveBeenCalled();
     });
   });
-
-  // describe("When it has an error when renaming the file", () => {
-  //   test("Then it should call the next method with an error", async () => {
-  //     const newVideogame = {
-  //       name: "Hola",
-  //       platforms: ["PS4, XBOX, PS5, PC"],
-  //       genre: "Shooter",
-  //       description: "Hola",
-  //       year: 2019,
-  //       id: "1",
-  //     };
-  //     const newFile = {
-  //       fieldname: "image",
-  //       originalname: "hola.jpeg",
-  //       encoding: "7bit",
-  //       mimetype: "image/jpeg",
-  //       destination: "uploads/",
-  //       filename: "93ec034d18753a982e662bc2fdf9a584",
-  //       path: "uploads/93ec034d18753a982e662bc2fdf9a584",
-  //       size: 8750,
-  //     };
-
-  //     const req = {
-  //       body: newVideogame,
-  //       file: newFile,
-  //       params: "1",
-  //     };
-  //     const res = {
-  //       status: jest.fn().mockReturnThis(),
-  //       json: jest.fn(),
-  //     };
-  //     const next = jest.fn();
-  //     jest
-  //       .spyOn(fs, "rename")
-  //       .mockImplementation((oldFileName, newFileName, callback) => {
-  //         callback("error");
-  //       });
-
-  //     await updateVideogame(req, res, next);
-
-  //     expect(next).toHaveBeenCalled();
-  //   });
-  // });
 });
