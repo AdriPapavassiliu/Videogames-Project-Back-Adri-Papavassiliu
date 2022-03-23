@@ -2,7 +2,6 @@ require("dotenv").config();
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const mongoose = require("mongoose");
 const request = require("supertest");
-// const jwt = require("jsonwebtoken");
 const databaseConnect = require("../../database");
 const User = require("../../database/models/User");
 const Videogame = require("../../database/models/Videogame");
@@ -28,12 +27,6 @@ beforeEach(async () => {
     username: "gini",
     password: "$2b$10$KJBw85d2lseR5CY8/QA6reYsohmb0P.sA0sYMjnDDU7cxrpMsZ6GW",
   });
-
-  // const userDataToken = {
-  //   username: "user1",
-  // };
-
-  // token = jwt.sign(userDataToken, process.env.JWT_SECRET);
 
   await User.create({
     name: "user2",
@@ -109,6 +102,25 @@ describe("Given a /login endpoint", () => {
         .expect(401);
 
       expect(body.error).toBe(expectedError.message);
+    });
+  });
+});
+
+describe("Given a /register endpoint", () => {
+  describe("When it receives a request with a POST method and a new user on the body", () => {
+    test("Then it should respond with a 201 status and the new user", async () => {
+      const newUser = {
+        username: "vini",
+        name: "vini",
+        password: "vini",
+      };
+
+      const { body } = await request(app)
+        .post("/user/register")
+        .send(newUser)
+        .expect(201);
+
+      expect(body).toHaveProperty("username", newUser.username);
     });
   });
 });
