@@ -83,6 +83,121 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "Register user",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"oleguer\",\n    \"username\": \"oleguer\",\n    \"password\": \"oleguer\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}user/register",
+          "host": ["{{url}}user"],
+          "path": ["register"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login user",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"oleguer\",\n    \"username\": \"oleguer\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}user/login",
+          "host": ["{{url}}user"],
+          "path": ["login"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update videogame",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImdpbmkiLCJpZCI6IjYyMzMyYmI3NzAyZTk1MGQ4ZjRhNTU0ZCIsImlhdCI6MTY0NzcyMTA4NX0.7N7WgLo_DmIu7XSqrWust71i4zutm2XQLzaonhg83tk",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "genre",
+              "value": "Shooter",
+              "type": "text"
+            },
+            {
+              "key": "name",
+              "value": "kevin",
+              "type": "text"
+            },
+            {
+              "key": "platforms",
+              "value": "PC",
+              "type": "text"
+            },
+            {
+              "key": "description",
+              "value": "the uwuest",
+              "type": "text"
+            },
+            {
+              "key": "year",
+              "value": "1994",
+              "type": "text"
+            },
+            {
+              "key": "image",
+              "type": "file",
+              "src": "/home/usuario/Downloads/call-of-duty-warzone-skydive_1220x2160_xtrafondos.com.jpg"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{url}}videogames/update/6232f15eb425230dbf4a7f81",
+          "host": ["{{url}}videogames"],
+          "path": ["update", "6232f15eb425230dbf4a7f81"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get videogame",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}videogames/6232f15eb425230dbf4a7f81",
+          "host": ["{{url}}videogames"],
+          "path": ["6232f15eb425230dbf4a7f81"]
+        }
+      },
+      "response": []
     }
   ],
   "event": [
