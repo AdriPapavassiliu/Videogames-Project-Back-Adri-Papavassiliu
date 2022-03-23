@@ -7,7 +7,7 @@ const User = require("../../database/models/User");
 const connectToMyDatabase = require("../../database/index");
 
 const Videogame = require("../../database/models/Videogame");
-const { loginUser } = require("./usersControllers");
+const { loginUser, createUser } = require("./usersControllers");
 
 jest.mock("../../database/models/User");
 
@@ -33,6 +33,7 @@ beforeEach(async () => {
   token = jwt.sign(userDataToken, process.env.JWT_SECRET);
 
   await User.create({
+    name: registeredUsername,
     username: registeredUsername,
     password: registeredPassword,
     videogames: {},
@@ -58,7 +59,7 @@ afterAll(() => {
 });
 
 describe("Given a loginUser controller", () => {
-  describe("When it receives a request with a correct username password", () => {
+  describe("When it receives a request with a correct username and password", () => {
     test("Then it should return a token", async () => {
       const password = "adri";
       const user = {
@@ -123,6 +124,48 @@ describe("Given a loginUser controller", () => {
       User.findOne = jest.fn().mockResolvedValue(user.username);
 
       await loginUser(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(expectedError);
+    });
+  });
+});
+
+describe("Given a createUser controller", () => {
+  describe("When it receives a request without password", () => {
+    test("Then it should return a 404 status with an error", async () => {
+      const user = {
+        name: "adri",
+        username: "adri",
+      };
+
+      const req = {
+        body: user,
+      };
+      const next = jest.fn();
+      const expectedError = new Error("Please fill the blank fields");
+      expectedError.code = 400;
+
+      await createUser(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(expectedError);
+    });
+  });
+
+  describe("When it receives a request with name, repeated username and password", () => {
+    test("Then it should return a 409 status with an error", async () => {
+      const user = {
+        name: "juan",
+        username: "adri",
+        password: "1234",
+      };
+      const req = {
+        body: user,
+      };
+      const next = jest.fn();
+      const expectedError = new Error("Username already taken");
+      expectedError.code = 409;
+
+      await createUser(req, null, next);
 
       expect(next).toHaveBeenCalledWith(expectedError);
     });
